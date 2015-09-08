@@ -2,6 +2,7 @@ from selenium import webdriver
 import unittest 
 
 class NewVisitorTest(unittest.TestCase): #1
+
   def setUp(self):
     self.browser = webdriver.Firefox()
     self.browser.implicitly_wait(3)
@@ -17,6 +18,7 @@ class NewVisitorTest(unittest.TestCase): #1
     # She notices the page title and header mention to-do lists 
     self.assertIn('To-Do', self.browser.title) #5 
     self.fail('Finish the test!') #6 
+
     # She is invited to enter a to-do item straight away
 
     # She types "Buy peacock feathers" into a text box (Edith's hobby
