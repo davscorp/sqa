@@ -7,16 +7,16 @@ from django.template.loader import render_to_string
 
 class HomePageTest(TestCase):
 
-#    def test_root_url_resolves_to_home_page_view(self):
+#   def test_root_url_resolves_to_home_page_view(self):
 #        found = resolve('/')  #2
 #        self.assertEqual(found.func, home_page)  #3
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()  #1
         response = home_page(request)  #2
-#        self.assertIn('A new list item', response.content.decode())
+#       self.assertIn('A new list item', response.content.decode())
         expected_html = render_to_string('home.html',
         {'new_item_text':  'A new list item'})
-        self.assertEqual(response.content.decode(), expected_html)
+        #self.assertEqual(response.content.decode(), expected_html)
         #self.assertTrue(response.content.startswith(b'<html>'))  #3
         #self.assertIn(b'<title>To-Do lists</title>', response.content)  #4
         #self.assertTrue(response.content.strip().endswith(b'</html>'))  #5
@@ -30,6 +30,35 @@ class HomePageTest(TestCase):
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, 'A new list item')
+
+    def test_home_page_show_auto_comment_empty(self):
+       request = HttpRequest()
+       response = home_page(request)
+    
+       self.assertIn('yey, waktunya berlibur', response.content.decode())
+       #self.assertEqual(Item.objects.count(), 0, 'yes waktunya berlibur')
+
+    def test_home_page_show_auto_comment_less_than_five(self):
+       Item.objects.create(text='1: added entry 1')
+
+       request = HttpRequest()
+       response = home_page(request)
+
+       self.assertIn('sibuk tapi santai', response.content.decode())
+       #self.assertLess(Item.objects.count(), 5, 'sibuk tapi santai')
+    
+    def test_home_page_show_auto_comment_more_than_four(self):
+       Item.objects.create(text='1: added entry 1')
+       Item.objects.create(text='2: added entry 2')
+       Item.objects.create(text='3: added entry 3')
+       Item.objects.create(text='4: added entry 4')
+       Item.objects.create(text='5: added entry 5')
+
+       request = HttpRequest()
+       response = home_page(request)
+
+       self.assertIn('oh tidak', response.content.decode())
+       #self.assertGreaterEqual(Item.objects.count(), 5, 'oh tidak')
 
     def test_home_page_redirects_after_POST(self):
         request = HttpRequest()
@@ -55,17 +84,6 @@ class HomePageTest(TestCase):
 
         self.assertIn('itemey 1', response.content.decode())
         self.assertIn('itemey 2', response.content.decode())
-
-    def test_count_row_all_item(self):
-
-        if(Item.objects.count()=0):
-        print "yey, waktunya berlibur"
-        
-        if(Item.objects.count()<5):
-        print "sibuk tapi santai"
-
-        if(Item.objects.count()>=5):
-        print "oh tidak"
 
 class ItemModelTest(TestCase):
 

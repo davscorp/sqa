@@ -19,4 +19,13 @@ def home_page(request):
         return redirect('/')
 
     items = Item.objects.all()
-    return render(request, 'home.html', {'items': items})
+    counter= items.count()
+    status = ''  
+
+    if counter == 0:
+         status = 'yey, waktunya berlibur'
+    elif counter < 5: 
+         status = 'sibuk tapi santai'
+    else: 
+         status = 'oh tidak'
+    return render(request, 'home.html', {'items': items, 'status': status})
