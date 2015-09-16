@@ -7,9 +7,9 @@ from django.template.loader import render_to_string
 
 class HomePageTest(TestCase):
 
-    def test_root_url_resolves_to_home_page_view(self):
-        found = resolve('/')  #2
-        self.assertEqual(found.func, home_page)  #3
+#    def test_root_url_resolves_to_home_page_view(self):
+#        found = resolve('/')  #2
+#        self.assertEqual(found.func, home_page)  #3
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()  #1
         response = home_page(request)  #2
@@ -55,6 +55,17 @@ class HomePageTest(TestCase):
 
         self.assertIn('itemey 1', response.content.decode())
         self.assertIn('itemey 2', response.content.decode())
+
+    def test_count_row_all_item(self):
+
+        if(Item.objects.count()=0):
+        print "yey, waktunya berlibur"
+        
+        if(Item.objects.count()<5):
+        print "sibuk tapi santai"
+
+        if(Item.objects.count()>=5):
+        print "oh tidak"
 
 class ItemModelTest(TestCase):
 
