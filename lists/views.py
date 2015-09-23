@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from lists.models import Item
+from lists.models import Item, List
 
 # Create your views here.
 def home_page(request):
@@ -14,29 +14,31 @@ def home_page(request):
   # return render(request, 'home.html', {
   #      'new_item_text': item.text
   # })
-    if request.method == 'POST':
-        Item.objects.create(text=request.POST['item_text'])
-        return redirect('/lists/the-only-list-in-the-world/')
-    #return render(request, 'home.html')
+    #if request.method == 'POST':
+     #  Item.objects.create(text=request.POST['item_text'])
+       #return redirect('/lists/the-only-list-in-the-world/')
+    return render(request, 'home.html')
 
-    items = Item.objects.all()
+def new_list(request):
+    list_ = List.objects.create()
+    Item.objects.create(text=request.POST['item_text'], list=list_)
+    return redirect('/lists/%d/' % (list_.id,))
+
+def view_list(request, list_id):
+    list_ = List.objects.get(id=list_id)
+    items = Item.objects.filter(list=list_)
     counter= items.count()
-    status = ''  
+    status = ''
 
     if counter == 0:
          status = 'yey, waktunya berlibur'
-    elif counter < 5: 
+    elif counter < 5:
          status = 'sibuk tapi santai'
-    else: 
+    else:
          status = 'oh tidak'
-    return render(request, 'home.html', {'items': items, 'status': status})
+    return render(request, 'list.html', {'items': items, 'status': status, 'list': list_})
 
-def new_list(request):
-#    pass
-    Item.objects.create(text=request.POST['item_text'])
-    return redirect('/lists/the-only-list-in-the-world/')
-
-def view_list(request):
-#     pass
-    items = Item.objects.all()
-    return render(request, 'list.html', {'items': items})
+def add_item(request, list_id):
+    list_ = List.objects.get(id=list_id)
+    Item.objects.create(text=request.POST['item_text'], list=list_)
+    return redirect('/lists/%d/' % (list_.id,))
