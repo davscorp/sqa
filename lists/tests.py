@@ -20,14 +20,14 @@ class HomePageTest(TestCase):
         #self.assertTrue(response.content.startswith(b'<html>'))  #3
         #self.assertIn(b'<title>To-Do lists</title>', response.content)  #4
         #self.assertTrue(response.content.strip().endswith(b'</html>'))  #5
-
+    '''
     def test_home_page_show_auto_comment_empty(self):
        request = HttpRequest()
        response = home_page(request)
     
        self.assertIn('yey, waktunya berlibur', response.content.decode())
        #self.assertEqual(Item.objects.count(), 0, 'yes waktunya berlibur')
-    '''
+    
     def test_home_page_show_auto_comment_less_than_five(self):
        Item.objects.create(text='1: added entry 1')
 
