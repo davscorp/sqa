@@ -8,17 +8,25 @@ from django.template.loader import render_to_string
 from django.utils.html import escape
 
 class HomePageTest(TestCase):
-
+    maxDiff = None
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()  #1
         response = home_page(request)  #2
-        expected_html = render_to_string('home.html',
-        {'new_item_text':  'A new list item'})
+        expected_html = render_to_string('home.html',{'form': ItemForm()})
+        self.assertMultiLineEqual(response.content.decode(), expected_html)
 
     def test_home_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
         home_page(request)
         self.assertEqual(Item.objects.count(), 0)
+
+    def test_home_page_renders_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html') #1
+
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], ItemForm) #2
 
 class NewListTest(TestCase):
     def test_saving_a_POST_request(self):
