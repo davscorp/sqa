@@ -23,7 +23,8 @@
                     {% csrf_token %}
                     {% if error %}
                            <div class="form-group has-error">
-                                <span class="help-block">{{ error }}</span>
+                                <span class="help-block">You can&#39;t have an
+empty list item</span>
                            </div>
                     {% endif %}
                 </form>

@@ -5,24 +5,18 @@ from django.core.exceptions import ValidationError
 
 # Create your views here.
 def home_page(request):
-  #  if request.method == 'POST':
-  #      return HttpResponse(request.POST['item_text'])
-  #  return HttpResponse(b'<html><title>David Lawrence - 1206208523</title></html>')
-  #  item = Item()
-  #  item.text = request.POST.get('item_text', '')
-  #  item.save()
-
-  # return render(request, 'home.html', {
-  #      'new_item_text': item.text
-  # })
-    #if request.method == 'POST':
-     #  Item.objects.create(text=request.POST['item_text'])
-       #return redirect('/lists/the-only-list-in-the-world/')
     return render(request, 'home.html')
 
 def new_list(request):
     list_ = List.objects.create()
-    Item.objects.create(text=request.POST['item_text'], list=list_)
+    item = Item(text=request.POST['item_text'], list=list_)
+    try:
+        item.full_clean()
+        item.save()
+    except ValidationError:
+        list_.delete()
+        error = "You can't have an empty list item"
+        return render(request, 'home.html', {"error": error})
     return redirect(list_)
 
 def view_list(request, list_id):
@@ -38,11 +32,9 @@ def view_list(request, list_id):
         except ValidationError:
             error = "You can't have an empty list item"
 
-    return render(request, 'list.html', {'list': list_, 'error': error})
-
     items = Item.objects.filter(list=list_)
     counter= items.count()
-    status = ''
+    status = 'yey, waktunya berlibur'
 
     if counter == 0:
          status = 'yey, waktunya berlibur'
@@ -50,7 +42,7 @@ def view_list(request, list_id):
          status = 'sibuk tapi santai'
     else:
          status = 'oh tidak'
-    return render(request, 'list.html', {'items': items, 'status': status, 'list': list_})
+    return render(request, 'list.html', {'items': items, 'error': error, 'status': status, 'list': list_})
 
 def add_item(request, list_id):
     list_ = List.objects.get(id=list_id)
