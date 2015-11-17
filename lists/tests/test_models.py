@@ -86,6 +86,11 @@ class NewListTest(TestCase):
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
         #self.assertEqual(response.status_code, 302)
         #self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
+
+    def test_get_absolute_url(self):
+        list_ = List.objects.create()
+        self.assertEqual(list_.get_absolute_url(), '/lists/%d/' % (list_.id,))
+
     '''
     def test_saving_a_POST_request(self):
         request = HttpRequest()
