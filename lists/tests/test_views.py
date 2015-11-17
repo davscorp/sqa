@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from lists.models import Item, List
 from lists.views import home_page #1
 from django.template.loader import render_to_string
+from django.utils.html import escape
 
 class HomePageTest(TestCase):
 
@@ -85,6 +86,19 @@ class NewListTest(TestCase):
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
         #self.assertEqual(response.status_code, 302)
         #self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
+
+    def test_validation_errors_are_sent_back_to_home_page_template(self):
+        response = self.client.post('/lists/new', data={'item_text': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        expected_error = "You can't have an empty list item"
+        self.assertContains(response, expected_error)
+
+    def test_invalid_list_items_arent_saved(self):
+        self.client.post('/lists/new', data={'item_text': ''})
+        self.assertEqual(List.objects.count(), 0)
+        self.assertEqual(Item.objects.count(), 0)
+
     '''
     def test_saving_a_POST_request(self):
         request = HttpRequest()
@@ -174,3 +188,6 @@ class NewItemTest(TestCase):
         )
 
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
+
+        expected_error = escape("You can't have an empty list item")
+        self.assertContains(response, expected_error)
