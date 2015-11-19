@@ -19,7 +19,7 @@ class NewVisitorTest(FunctionalTest):
     #self.assertIn('To-Do', header_text)  
 
     # She is invited to enter a to-do item straight away
-    inputbox = self.get_item_input_box()
+    inputbox = self.browser.find_element_by_id('id_new_item')
     self.assertEqual(
         inputbox.get_attribute('placeholder'),
         'Enter a to-do item'
@@ -87,6 +87,6 @@ class NewVisitorTest(FunctionalTest):
     #inputbox.send_keys(Keys.ENTER)
     #inputbox = self.browser.find_element_by_id('status')
     #self.assertEqual(
-     #   status.text,
-     #   'yey, waktunya berlibur'
+    #    status.text,
+    #    'yey, waktunya berlibur'
     #)
