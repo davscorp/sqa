@@ -98,6 +98,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+SOUTH_TESTS_MIGRATE = False
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/

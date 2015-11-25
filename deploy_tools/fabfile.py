@@ -19,12 +19,13 @@ def _create_directory_structure_if_necessary(site_folder):
         run('mkdir -p %s/%s' % (site_folder, subfolder))  #12
 
 def _get_latest_source(source_folder):
+    env.warn_only = True
     if exists(source_folder + '/.git'):  #1
         run('cd %s && git fetch' % (source_folder,))  #23
     else:
-        run('sudo git clone %s %s' % (REPO_URL, source_folder))  #4
+        run('git clone %s %s' % (REPO_URL, source_folder))  #4
     current_commit = local("git log -n 1 --format=%H", capture=True)  #5
-    run('cd %s && sudo git reset --hard %s' % (source_folder, current_commit))  #6
+    run('cd %s && git reset --hard %s' % (source_folder, current_commit))  #6
 
 def _update_settings(source_folder, site_name):
     settings_path = source_folder + '/superlists/settings.py'
