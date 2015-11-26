@@ -88,6 +88,6 @@ def _update_static_files(source_folder):
 
 def _update_database(source_folder):
     env.warn_only = True
-    run('cd %s && ../virtualenv/bin/python3 manage.py migrate --noinput' % (
+    run('cd %s && sudo ../virtualenv/bin/python3 manage.py migrate --noinput' % (
         source_folder,
     ))
