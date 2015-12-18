@@ -14,12 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='List',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
             ],
-        ),
-        migrations.AddField(
-            model_name='item',
-            name='list',
-            field=models.TextField(default=''),
         ),
     ]

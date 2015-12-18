@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('lists', '0003_auto_20150922_0824'),
+        ('lists', '0003_list'),
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
             model_name='item',
             name='list',
-            field=models.ForeignKey(to='lists.List', default=None),
+            field=models.ForeignKey(default=None, to='lists.List'),
         ),
     ]
